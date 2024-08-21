@@ -11,6 +11,13 @@ function App() {
   //const[rates, setRates] = React.useState({});
   const ratesRef = React.useRef({});
 
+  const onChangeToPrice = (value) => {
+    const result =
+      (ratesRef.current[fromCurrency] / ratesRef.current[toCurrency]) * value;
+    setToPrice(value);
+    setFromPrice(result.toFixed(3));
+  };
+
   React.useEffect(() => {
     fetch("https://www.cbr-xml-daily.ru/latest.js")
       .then((res) => res.json())
@@ -22,6 +29,7 @@ function App() {
         console.warn(err);
         alert("Невдалось отримати дані");
       });
+    // eslint-disable-next-line
   }, []);
 
   const onChangeFromPrice = (value) => {
@@ -31,19 +39,14 @@ function App() {
     setFromPrice(value);
   };
 
-  const onChangeToPrice = (value) => {
-    const result =
-      (ratesRef.current[fromCurrency] / ratesRef.current[toCurrency]) * value;
-    setToPrice(value);
-    setFromPrice(result.toFixed(3));
-  };
-
   React.useEffect(() => {
     onChangeToPrice(toPrice);
+    // eslint-disable-next-line
   }, [toCurrency]);
 
   React.useEffect(() => {
     onChangeFromPrice(fromPrice);
+    // eslint-disable-next-line
   }, [fromCurrency]);
 
   return (
