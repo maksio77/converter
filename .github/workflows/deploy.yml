@@ -10,23 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '21'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "21"
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build the app
-      run: npm run build
+      - name: Build the app
+        run: npm run build
 
-    - name: Deploy to server
-      run: |
-        echo "Deploying to server..."
-        scp -r ./build/* maksio@192.168.64.5:/var/www/html
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.10.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to server
+        run: |
+          echo "Deploying to server..."
+          scp -r ./build/* maksio@192.168.64.5:/var/www/html
